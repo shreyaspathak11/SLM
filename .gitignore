@@ -1,0 +1,18 @@
+# Environment variables & secrets
+.env
+
+# Large model weights
+model/*.gguf
+*.gguf
+
+# Python cache & virtual environments
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# Training outputs
+text_to_sql_outputs/
+wandb/
+
