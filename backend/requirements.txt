@@ -1,6 +1,13 @@
-fastapi>=0.115.0
-uvicorn[standard]>=0.30.0
-pydantic>=2.8.0
-python-dotenv>=1.0.1
-llama-cpp-python>=0.2.90
+# Web Framework & Server
+fastapi>=0.115.0            
+uvicorn[standard]>=0.30.0   
 
+# Data Validation & Settings
+pydantic>=2.8.0            
+python-dotenv>=1.0.1      
+
+# Local SLM Inference
+llama-cpp-python>=0.2.90    
+
+# Observability & Monitoring
+weave>=0.51.0               
