@@ -1,6 +1,5 @@
 # Enterprise SLM Text-to-SQL Analytics Platform
 
-
 An end-to-end, zero-fallback Text-to-SQL system that translates natural language business questions into precise, executable SQL queries over an enterprise relational database.
 
 Powered by a **4-bit QLoRA fine-tuned `Llama-3.2-1B-Instruct`** model quantized to **`Q4_K_M` GGUF**, served locally on CPU via **`llama.cpp`** and **FastAPI**, safeguarded by a **5-stage production inference pipeline**, and presented through an interactive **Streamlit + Plotly** analytics interface.
@@ -40,14 +39,17 @@ flowchart TD
 ## Application Interface & Observability
 
 ### 1. Conversational Analytics Dashboard (Streamlit + Dynamic Plotly Visualizations)
+
 Translates complex business questions into instant tabular results and auto-generated Plotly charts:
 ![Streamlit Conversational Analytics Dashboard](assets/streamlit_analytics_ui.png)
 
 ### 2. FastAPI Backend & OpenAPI Specification (Swagger UI)
+
 Interactive API playground serving the 5-stage inference pipeline, health telemetry, and schema introspection:
 ![FastAPI Swagger API Documentation](assets/fastapi_swagger_api.png)
 
 ### 3. Production Agent Observability (Weights & Biases Weave)
+
 Real-time tracing of every SLM execution step, tracking latency, token usage, AST repairs, and database execution:
 ![Weights and Biases Weave Observability Dashboard](assets/wandb_weave_observability.jpg)
 
@@ -89,9 +91,7 @@ d:/SLM/
 
 ---
 
-
 ## Model Training Deep Dive & Engineering Learnings
-
 
 ### 1. Base Model Selection: Why a 1B Small Language Model (SLM)?
 
@@ -99,7 +99,6 @@ d:/SLM/
 - **Inference Latency:** Sub-second response times (`450 ms – 1,100 ms`) compared to 5–15+ seconds for remote 70B models or cloud APIs.
 - **Data Privacy & Security:** Zero internal database schema definitions or proprietary company records ever leave the local network boundary.
 - **Cost Efficiency:** Zero ongoing token API costs or cloud compute infrastructure bills.
-
 
 ### 2. Fine-Tuning Setup: 4-Bit QLoRA via Unsloth
 
@@ -113,7 +112,6 @@ The model was fine-tuned in Google Colab using [`notebooks/train_text_to_sql.ipy
 - **Trainable Parameter Ratio:** **~11.27M parameters trained out of 1.25B (only 0.90%)**, preserving base language understanding while mastering schema-to-SQL translation.
 - **Optimizer & Schedule:** 8-bit AdamW optimizer (`optim="adamw_8bit"`), `learning_rate=2e-4`, linear schedule with warmup, effective batch size of 8 (`per_device_batch_size=2`, `gradient_accumulation_steps=4`).
 - **Telemetry & Hardware Monitoring:** Custom `ResourceMonitorCallback` tracking GPU VRAM, CPU utilization, and system RAM to **Weights & Biases (`wandb`)** and **TensorBoard**.
-
 
 ### 3. Prompt Template & Formatting
 
@@ -131,7 +129,6 @@ Write a SQL query to answer this question: {question}
 ### Response:
 {answer}<|eot_id|>
 ```
-
 
 ### 4. Critical Learning: Why Raw Small Models Over-Join on Database Dumps
 
@@ -163,18 +160,13 @@ Evaluated directly in the training notebook on an unseen multi-table relational 
 
 Evaluated across 5 complexity tiers using [`backend/stress_test.py`](file:///d:/SLM/backend/stress_test.py) on the 7-table enterprise database:
 
-| Pipeline Stage Configuration                            | Valid SQL Execution Rate | Exact Result Match (EX)       | Avg SLM Latency                 | Avg 75K-Row DB Latency         |
-| :------------------------------------------------------ | :----------------------- | :---------------------------- | :------------------------------ | :----------------------------- |
-| **1. Direct Raw 1B** _(Full 7-table dump, no pipeline)_ | `13/20 (65.0%)`          | `3/20 – 9/20 (15.0% – 45.0%)` | `2,137 ms – 3,225 ms`           | N/A (crashes)                  |
-| **2. 1B + Schema Linker Only** _(`Repairs: []`)_        | `20/20 (100.0%)`         | `11/20 (55.0%)`               | `1,004 ms – 1,260 ms`           | `6.41 ms`                      |
-| **3. Full 5-Stage Production Pipeline**                 | **`20/20 (100.0%)`**     | **`20/20 (100.0%)`**          | **`1,004 ms` (2.56x faster)**   | **`6.41 ms` (Indexed B-Tree)** |
+| Pipeline Stage Configuration                            | Valid SQL Execution Rate | Exact Result Match (EX)       | Avg SLM Latency               | Avg 75K-Row DB Latency         |
+| :------------------------------------------------------ | :----------------------- | :---------------------------- | :---------------------------- | :----------------------------- |
+| **1. Direct Raw 1B** _(Full 7-table dump, no pipeline)_ | `13/20 (65.0%)`          | `3/20 – 9/20 (15.0% – 45.0%)` | `2,137 ms – 3,225 ms`         | N/A (crashes)                  |
+| **2. 1B + Schema Linker Only** _(`Repairs: []`)_        | `20/20 (100.0%)`         | `11/20 (55.0%)`               | `1,004 ms – 1,260 ms`         | `6.41 ms`                      |
+| **3. Full 5-Stage Production Pipeline**                 | **`20/20 (100.0%)`**     | **`20/20 (100.0%)`**          | **`1,004 ms` (2.56x faster)** | **`6.41 ms` (Indexed B-Tree)** |
 
 ---
-
-
-## Comprehensive Interview Cheatsheet & Talking Points
-
-   Use these concise, high-yield answers when discussing this project in technical interviews:
 
 ### Q1: "Why use an SLM (1B) instead of GPT-4, Claude, or a 70B open-weights model?"
 
@@ -315,5 +307,6 @@ To build and run the entire stack with containerized networking:
 ```bash
 docker compose up --build
 ```
+
 - **Streamlit Frontend:** `http://localhost:8501`
 - **FastAPI Documentation:** `http://localhost:8000/docs`
