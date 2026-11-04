@@ -83,6 +83,14 @@ d:/SLM/
 │   └── README.md
 ├── notebooks/
 │   └── train_text_to_sql.ipynb   # Colab QLoRA fine-tuning, W&B logging & GGUF export
+├── docs/
+│   ├── architecture.md           # System topology, pipeline contracts & API specs
+│   └── testing_and_benchmarking.md # 20-query stress benchmark methodology & metrics
+├── .agents/
+│   └── skills/
+│       └── text-to-sql-pipeline/
+│           └── SKILL.md          # Agent workflow skill for pipeline development
+├── AGENTS.md                     # Architectural rules & coding guidelines
 ├── docker-compose.yml            # Multi-container orchestration
 ├── .env.example
 ├── .gitignore
