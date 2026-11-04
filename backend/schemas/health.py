@@ -13,4 +13,6 @@ class HealthResponse(BaseModel):
 
 class SchemaResponse(BaseModel):
     schema_ddl: str
+    tables: dict[str, dict[str, str]] = {}
+    foreign_keys: list[dict[str, str]] = []
 

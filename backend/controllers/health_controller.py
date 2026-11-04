@@ -18,5 +18,18 @@ def get_health() -> HealthResponse:
 
 
 def get_schema() -> SchemaResponse:
-    return SchemaResponse(schema_ddl=schema_linker.full_schema)
+    fks = [
+        {
+            "from_table": fk[0],
+            "from_column": fk[1],
+            "to_table": fk[2],
+            "to_column": fk[3],
+        }
+        for fk in schema_linker.fk_relations
+    ]
+    return SchemaResponse(
+        schema_ddl=schema_linker.full_schema,
+        tables=schema_linker.table_columns,
+        foreign_keys=fks,
+    )
 
