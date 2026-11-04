@@ -1,4 +1,4 @@
-﻿"""Enterprise analytics database generator for stress-testing Text-to-SQL SLMs.
+"""Enterprise analytics database generator for stress-testing Text-to-SQL SLMs.
 
 Creates an SQLite database (analytics.db) with 7 normalized tables and 75,000+ records:
 - Departments (8 rows)
